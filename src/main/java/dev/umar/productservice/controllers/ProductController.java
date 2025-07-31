@@ -6,6 +6,8 @@ import dev.umar.productservice.services.ProductService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 @RestController
 public class ProductController {
     //Injecting the dependency
@@ -34,8 +36,8 @@ public class ProductController {
         return productService.getSingleProduct(productId);
     }
     @GetMapping("/products")
-    public void getAllProducts(){
-
+    public List<Product> getAllProducts(){
+      return productService.getAllProducts();
     }
     public void updateProduct(){
     }

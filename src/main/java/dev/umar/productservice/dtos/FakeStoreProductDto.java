@@ -1,5 +1,6 @@
 package dev.umar.productservice.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dev.umar.productservice.models.Category;
 import dev.umar.productservice.models.Product;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FakeStoreProductDto {
     private Long id;
     private String title;

@@ -5,7 +5,7 @@ import dev.umar.productservice.models.Product;
 import java.util.List;
 
 public interface ProductService {
-    public Product getAllProducts();
+    //public Product getAllProducts();
 
     Product createProduct(String title,
                           String description,
@@ -14,5 +14,5 @@ public interface ProductService {
                           double price);
 
     public Product getSingleProduct(Long id);
-    List<Product> getAllProducts(int page, int size);
+   public  List<Product> getAllProducts();
 }
