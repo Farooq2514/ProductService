@@ -3,9 +3,13 @@ package dev.umar.productservice.services;
 import dev.umar.productservice.dtos.FakeStoreProductDto;
 import dev.umar.productservice.dtos.WrapperDto;
 import dev.umar.productservice.dtos.WrapperListDtoResponse;
+import dev.umar.productservice.exceptions.ProductNotFoundException;
 import dev.umar.productservice.models.Category;
 import dev.umar.productservice.models.Product;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -25,10 +29,10 @@ public class FakeStoreProductService implements ProductService {
 
     @Override
     public List<Product> getAllProducts() {
-        WrapperListDtoResponse response = restTemplate.getForObject("https://dummyjson.com/products",
+       ResponseEntity <WrapperListDtoResponse> response = restTemplate.getForEntity("https://dummyjson.com/products",
                 WrapperListDtoResponse.class);
         List<Product> products = new ArrayList<>();
-        for(WrapperDto dto : response.getProducts()){
+        for(WrapperDto dto : response.getBody().getProducts()){
             Product product = new Product();
             product.setId(dto.getId());
             product.setTitle(dto.getTitle());
@@ -40,6 +44,9 @@ public class FakeStoreProductService implements ProductService {
             product.setCategory(category);
             products.add(product);
         }
+       if(!response.getStatusCode().is2xxSuccessful()){
+           throw new RuntimeException("Something went wrong");
+       }
         return products;
     }
 
@@ -60,8 +67,16 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public Product getSingleProduct(Long id) {
-       FakeStoreProductDto fakeStoreProductDto =  restTemplate.getForObject("https://dummyjson.com/products/"+ id, FakeStoreProductDto.class);
-        return fakeStoreProductDto.toProduct();
+    public Product getSingleProduct(Long id) throws ProductNotFoundException {
+        try {
+            FakeStoreProductDto fakeStoreProductDto = restTemplate.getForObject("https://dummyjson.com/products/"
+                    + id, FakeStoreProductDto.class);
+            return fakeStoreProductDto.toProduct();
+        }catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                throw new ProductNotFoundException("product with id :  " + id + " not found");
+            }
+            throw new RuntimeException("Error in Fetching product " + e.getMessage());
+        }
     }
 }

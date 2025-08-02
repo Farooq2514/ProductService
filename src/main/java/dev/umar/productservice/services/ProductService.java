@@ -1,5 +1,6 @@
 package dev.umar.productservice.services;
 
+import dev.umar.productservice.exceptions.ProductNotFoundException;
 import dev.umar.productservice.models.Product;
 
 import java.util.List;
@@ -13,6 +14,6 @@ public interface ProductService {
                           String category,
                           double price);
 
-    public Product getSingleProduct(Long id);
+    public Product getSingleProduct(Long id) throws ProductNotFoundException;
    public  List<Product> getAllProducts();
 }
