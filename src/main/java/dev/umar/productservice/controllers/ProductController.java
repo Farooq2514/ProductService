@@ -5,6 +5,7 @@ import dev.umar.productservice.dtos.ErrorDto;
 import dev.umar.productservice.exceptions.ProductNotFoundException;
 import dev.umar.productservice.models.Product;
 import dev.umar.productservice.services.ProductService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class ProductController {
     ProductService productService;
     RestTemplate restTemplate;
 
-    ProductController(ProductService productService, RestTemplate restTemplate) {
+    ProductController(@Qualifier("selfProductService") ProductService productService, RestTemplate restTemplate) {
         this.productService = productService;
         this.restTemplate = restTemplate;
     }
@@ -47,8 +48,14 @@ public class ProductController {
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
-
-    public void updateProduct() {
+    @PutMapping("/products/{id}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id , @RequestBody Product product) throws ProductNotFoundException {
+      Product updatedProduct = productService.updateProduct(id , product);
+        return ResponseEntity.ok(updatedProduct);
+    }
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity<Product> deleteProduct(@PathVariable Long id) throws ProductNotFoundException {
+        return ResponseEntity.ok(productService.deleteProduct(id));
     }
 
 //    @ExceptionHandler(ProductNotFoundException.class)

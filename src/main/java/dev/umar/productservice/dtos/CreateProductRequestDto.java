@@ -1,13 +1,12 @@
 package dev.umar.productservice.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor@AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class CreateProductRequestDto {
     private String title;
     private String description;

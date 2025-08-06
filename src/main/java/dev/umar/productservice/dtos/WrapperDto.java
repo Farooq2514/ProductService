@@ -16,5 +16,5 @@ public class WrapperDto {
     private double price;
     private String image;
     private String category;
-
+//this class created because we cannot directly convert the dto into tha array and return it
 }

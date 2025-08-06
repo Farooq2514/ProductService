@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service("fakeStoreProductService")
 //this annotation is for telling spring hey spring this is a service class where business logic is going to run
 public class FakeStoreProductService implements ProductService {
     RestTemplate restTemplate;
@@ -36,7 +36,7 @@ public class FakeStoreProductService implements ProductService {
             Product product = new Product();
             product.setId(dto.getId());
             product.setTitle(dto.getTitle());
-            product.setDesctiption(dto.getDescription());
+            product.setDescription(dto.getDescription());
             product.setPrice(dto.getPrice());
             product.setImageUrl(dto.getImage());
             Category category = new Category();
@@ -48,6 +48,16 @@ public class FakeStoreProductService implements ProductService {
            throw new RuntimeException("Something went wrong");
        }
         return products;
+    }
+
+    @Override
+    public Product deleteProduct(Long id) throws ProductNotFoundException {
+        return null;
+    }
+
+    @Override
+    public Product updateProduct(Long id , Product product) throws ProductNotFoundException {
+        return null;
     }
 
     @Override
